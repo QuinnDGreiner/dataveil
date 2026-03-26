@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #ffffff;
+  --accent-dim: rgba(255,255,255,0.08);
+  --danger: #ff3b3b;
+  --danger-dim: rgba(255,59,59,0.12);
+}
+
+[data-accent="red"]    { --accent: #ff3b3b; --accent-dim: rgba(255,59,59,0.12); }
+[data-accent="blue"]   { --accent: #3b8eff; --accent-dim: rgba(59,142,255,0.12); }
+[data-accent="purple"] { --accent: #a855f7; --accent-dim: rgba(168,85,247,0.12); }
+[data-accent="white"]  { --accent: #ffffff; --accent-dim: rgba(255,255,255,0.08); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0a0a0a;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+/* Animated count-up numbers */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.count-up { animation: countUp 0.4s ease forwards; }
+
+/* PII redaction animation */
+@keyframes redact {
+  0%   { background: transparent; color: inherit; }
+  30%  { background: var(--danger-dim); color: var(--danger); text-decoration: line-through; }
+  100% { background: #1a1a1a; color: #555; letter-spacing: 0.05em; }
+}
+.pii-token {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0 4px;
+  animation: redact 0.6s ease forwards;
+}
+
+/* Glow on hover */
+.glow-hover {
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.glow-hover:hover {
+  box-shadow: 0 0 0 1px var(--accent);
+  border-color: var(--accent) !important;
+}
+
+/* Accent color utility */
+.text-accent  { color: var(--accent); }
+.bg-accent    { background: var(--accent); }
+.border-accent { border-color: var(--accent); }
+.ring-accent   { box-shadow: 0 0 0 1px var(--accent); }

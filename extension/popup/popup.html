@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dataveil</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0d0d0d;
+      color: #fff;
+      width: 300px;
+      min-height: 340px;
+      -webkit-font-smoothing: antialiased;
+      font-size: 13px;
+    }
+
+    .header {
+      padding: 16px;
+      border-bottom: 1px solid #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo span { font-size: 18px; }
+    .logo-text { font-size: 13px; font-weight: 700; }
+
+    .status-pill {
+      display: flex; align-items: center; gap-5px;
+      background: #111; border: 1px solid #1a1a1a;
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 10px; color: #444;
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #fff; display: inline-block; margin-right: 5px;
+    }
+    .status-dot.off { background: #333; }
+
+    .toggle-row {
+      padding: 14px 16px;
+      border-bottom: 1px solid #0f0f0f;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .toggle-label { font-size: 12px; color: #ccc; }
+    .toggle { position: relative; width: 40px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background: #1a1a1a; border: 1px solid #222; border-radius: 22px; transition: .2s;
+    }
+    .slider:before {
+      content: ""; position: absolute;
+      height: 16px; width: 16px; left: 2px; bottom: 2px;
+      background: #444; border-radius: 50%; transition: .2s;
+    }
+    input:checked + .slider { background: #fff; border-color: #fff; }
+    input:checked + .slider:before { transform: translateX(18px); background: #000; }
+
+    .stats { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat {
+      background: #111; border: 1px solid #1e1e1e;
+      border-radius: 12px; padding: 14px; text-align: center;
+    }
+    .stat .num { font-size: 28px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+    .stat .num.danger { color: #ff3b3b; }
+    .stat .lbl { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
+
+    .log-section { padding: 0 12px 12px; }
+    .log-title { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: #777; padding: 8px 4px 6px; }
+    .log-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 10px; border-radius: 8px;
+      background: #0a0a0a; border: 1px solid #0f0f0f; margin-bottom: 4px;
+    }
+    .log-service { font-size: 11px; font-weight: 600; color: #ccc; }
+    .log-time { font-size: 9px; color: #777; margin-top: 2px; font-family: monospace; }
+    .log-badge {
+      font-size: 10px; font-weight: 700; color: #ff3b3b;
+      font-family: monospace;
+    }
+    .empty { text-align: center; padding: 16px; color: #666; font-size: 11px; }
+
+    .footer {
+      padding: 10px 12px; border-top: 1px solid #0f0f0f;
+      display: flex; gap: 6px;
+    }
+    .btn {
+      flex: 1; padding: 8px; border: none; border-radius: 8px;
+      font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.15s;
+    }
+    .btn-primary { background: #fff; color: #000; }
+    .btn-primary:hover { background: #eee; }
+    .btn-secondary { background: #1a1a1a; color: #aaa; border: 1px solid #2a2a2a; }
+    .btn-secondary:hover { color: #fff; border-color: #444; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <span>🛡</span>
+      <span class="logo-text">Dataveil</span>
+    </div>
+    <div class="status-pill">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Active</span>
+    </div>
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Protection enabled</span>
+    <label class="toggle">
+      <input type="checkbox" id="enabled-toggle" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num danger" id="session-count">0</div>
+      <div class="lbl">Blocked today</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="prompts-count">0</div>
+      <div class="lbl">Prompts scanned</div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="log-title">Recent</div>
+    <div id="log-list">
+      <div class="empty">No activity yet</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="btn btn-secondary" id="settings-btn">Settings</button>
+    <button class="btn btn-primary" id="dashboard-btn">Dashboard →</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "Dataveil",
+  "version": "1.0.0",
+  "description": "Automatically scrubs personal data from your AI prompts before they leave your device.",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "webRequest",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://api.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://gemini.google.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://claude.ai/*",
+    "https://api.anthropic.com/*",
+    "https://www.perplexity.ai/*",
+    "https://grok.x.com/*",
+    "https://x.com/*",
+    "https://api.mistral.ai/*",
+    "https://huggingface.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://claude.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://grok.x.com/*"
+      ],
+      "js": ["pii/scrubber.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Dataveil"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "dataveil@dataveil.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
