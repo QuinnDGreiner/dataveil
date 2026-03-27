@@ -1,3 +1,4 @@
+import os
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,9 +13,12 @@ stripe.api_key = cfg.stripe_secret_key
 router = APIRouter()
 
 PRICE_IDS = {
-    "pro": "price_pro_monthly",    # Replace with real Stripe price IDs
-    "team": "price_team_monthly",
+    "pro": os.getenv("STRIPE_PRICE_PRO", "price_pro_monthly"),
+    "team": os.getenv("STRIPE_PRICE_TEAM", "price_team_monthly"),
 }
+
+# Use the last (production) URL from the comma-separated FRONTEND_URL
+_frontend_origin = [u.strip() for u in cfg.frontend_url.split(",") if u.strip()][-1]
 
 
 @router.post("/checkout")
@@ -36,8 +40,8 @@ async def create_checkout(
         customer_email=user.get("email") if not (row and row.stripe_customer_id) else None,
         line_items=[{"price": PRICE_IDS[plan], "quantity": 1}],
         mode="subscription",
-        success_url=f"{cfg.frontend_url}/billing?success=true",
-        cancel_url=f"{cfg.frontend_url}/billing?canceled=true",
+        success_url=f"{_frontend_origin}/billing?success=true",
+        cancel_url=f"{_frontend_origin}/billing?canceled=true",
         metadata={"user_id": user["user_id"], "plan": plan},
     )
 
